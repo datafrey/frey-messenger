@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "802304572379",
+    "firebase_url": "https://frey-messenger.firebaseio.com",
+    "project_id": "frey-messenger",
+    "storage_bucket": "frey-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802304572379:android:a02fb9e54caaeb148585fe",
+        "android_client_info": {
+          "package_name": "com.datafrey.freymessenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802304572379-ii9pt26bt3q72dalg24l5acgr018id3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.datafrey.freymessenger",
+            "certificate_hash": "e96d6f87a231f97cd863466d790448bbe8a9fd78"
+          }
+        },
+        {
+          "client_id": "802304572379-1839dqgcsmeee36b7nnigh701qob2pep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGE0rQbyKY_Ub7p5esmYYg6CCknLIundg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802304572379-1839dqgcsmeee36b7nnigh701qob2pep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_chats">Чати</string>
+    <string name="title_profile">Профіль</string>
+    <string name="save_dialog_message">Ви впевнені, що хочете зберегти зміни профілю?</string>
+    <string name="sign_out_dialog_message">Ви впевнені, що хочете вийти зі свого облікового запису?</string>
+    <string name="image_picker_title">Виберіть зображення</string>
+    <string name="profile_changes_saved_message">Зміни профілю збережені.</string>
+    <string name="sign_up_button_text">Реєстрація</string>
+    <string name="sign_in_button_text">Вхід</string>
+    <string name="toggle_mode_text_view_sign_up_mode_text">Доторкніться, щоб увійти</string>
+    <string name="toggle_mode_text_view_sign_in_mode_text">Доторкніться, щоб зареєструватися</string>
+    <string name="empty_email_field_error_message">Поле для введення пошти не заповнено!</string>
+    <string name="empty_password_field_error_message">Поле для введення пароля не заповнено!</string>
+    <string name="too_short_password_error_message">Пароль повинен складатися як мінімум з 7 символів!</string>
+    <string name="passwords_dont_match_error_message">Паролі не співпадають!</string>
+    <string name="empty_name_field_error_message">Поле для введення імені не заповнено!</string>
+    <string name="sign_in_email_edit_text_hint">Ваша пошта</string>
+    <string name="sign_in_password_edit_text_hint">Ваш пароль</string>
+    <string name="sign_in_repeat_password_edit_text_hint">Підтвердіть пароль</string>
+    <string name="sign_in_name_edit_text_hint">Ваше ім\'я</string>
+    <string name="authentication_failed_error_message">Помилка аутентифікації.</string>
+    <string name="dialog_positive_answer">Так</string>
+    <string name="dialog_negative_answer">Ні</string>
+    <string name="message_edit_text_hint">Ваше повідомлення</string>
+    <string name="send_message_button_text">Відправити</string>
+    <string name="profile_name_edit_text_hint">Ім\'я (максимум 30 символів)</string>
+    <string name="profile_bio_edit_text_hint">Біо (максимум 200 символів)</string>
+    <string name="empty_repeat_password_field_error_message">Ви повинні написати пароль повторно, щоб уникнути помилок!</string>
+</resources>

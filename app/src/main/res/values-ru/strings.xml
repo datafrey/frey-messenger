@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_chats">Чаты</string>
+    <string name="title_profile">Профиль</string>
+    <string name="save_dialog_message">Вы уверены, что хотите сохранить изменения профиля?</string>
+    <string name="sign_out_dialog_message">Вы уверены, что хотите выйти из аккаунта?</string>
+    <string name="image_picker_title">Выберите изображение</string>
+    <string name="profile_changes_saved_message">Изменения профиля сохранены.</string>
+    <string name="sign_up_button_text">Регистрация</string>
+    <string name="sign_in_button_text">Вход</string>
+    <string name="toggle_mode_text_view_sign_up_mode_text">Прикоснитесь, чтобы войти</string>
+    <string name="toggle_mode_text_view_sign_in_mode_text">Прикоснитесь, чтобы зарегистрироваться</string>
+    <string name="empty_email_field_error_message">Поле для ввода почты не заполнено!</string>
+    <string name="empty_password_field_error_message">Поле для ввода пароля не заполнено!</string>
+    <string name="too_short_password_error_message">Пароль должен состоять как минимум из 7 символов!</string>
+    <string name="passwords_dont_match_error_message">Пароли не совпадают!</string>
+    <string name="empty_name_field_error_message">Поле для ввода имени не заполнено!</string>
+    <string name="sign_in_email_edit_text_hint">Ваша почта</string>
+    <string name="sign_in_password_edit_text_hint">Ваш пароль</string>
+    <string name="sign_in_repeat_password_edit_text_hint">Подтвердите пароль</string>
+    <string name="sign_in_name_edit_text_hint">Ваше имя</string>
+    <string name="authentication_failed_error_message">Ошибка аутентификации.</string>
+    <string name="dialog_positive_answer">Да</string>
+    <string name="dialog_negative_answer">Нет</string>
+    <string name="message_edit_text_hint">Ваше сообщение</string>
+    <string name="send_message_button_text">Отправить</string>
+    <string name="profile_name_edit_text_hint">Имя (максимум 30 символов)</string>
+    <string name="profile_bio_edit_text_hint">Био (максимум 200 символов)</string>
+    <string name="empty_repeat_password_field_error_message">Вы должны написать пароль повторно, чтобы избежать ошибок!</string>
+</resources>

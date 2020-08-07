@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name" translatable="false">Frey Messenger</string>
+
+    <string name="title_chats">Chats</string>
+    <string name="title_profile">Profile</string>
+    <string name="save_dialog_message">Are you sure you want to save profile changes?</string>
+    <string name="sign_out_dialog_message">Are you sure you want to sign out?</string>
+    <string name="image_picker_title">Choose an image</string>
+    <string name="profile_changes_saved_message">Profile changes saved.</string>
+    <string name="sign_up_button_text">Sign Up</string>
+    <string name="sign_in_button_text">Sign In</string>
+    <string name="toggle_mode_text_view_sign_up_mode_text">Tap to Sign In</string>
+    <string name="toggle_mode_text_view_sign_in_mode_text">Tap to Sign Up</string>
+    <string name="empty_email_field_error_message">Email field is empty!</string>
+    <string name="empty_password_field_error_message">Password field is empty!</string>
+    <string name="too_short_password_error_message">Password must be at least 7 characters!</string>
+    <string name="passwords_dont_match_error_message">Passwords don\'t match!</string>
+    <string name="empty_name_field_error_message">Name field is empty!</string>
+    <string name="sign_in_email_edit_text_hint">Your Email</string>
+    <string name="sign_in_password_edit_text_hint">Your Password</string>
+    <string name="sign_in_repeat_password_edit_text_hint">Confirm Password</string>
+    <string name="sign_in_name_edit_text_hint">Your Name</string>
+    <string name="authentication_failed_error_message">Authentication failed.</string>
+    <string name="dialog_positive_answer">Yes</string>
+    <string name="dialog_negative_answer">No</string>
+    <string name="message_edit_text_hint">Your message here</string>
+    <string name="send_message_button_text">Send</string>
+    <string name="profile_name_edit_text_hint">Name (30 symbols max)</string>
+    <string name="profile_bio_edit_text_hint">Bio (200 symbols max)</string>
+    <string name="empty_repeat_password_field_error_message">You have to repeat the password to avoid mistakes!</string>
+</resources>
