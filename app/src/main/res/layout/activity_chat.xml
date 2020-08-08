@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context=".activities.ChatActivity">
 
     <ListView
@@ -21,6 +22,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

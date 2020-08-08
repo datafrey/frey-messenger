@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.chat_action_bar.view.*
+import kotlinx.android.synthetic.main.chat_activity_action_bar.view.*
 
 class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
 
@@ -73,7 +73,7 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
     private fun setupActionBar() {
         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)
                 as LayoutInflater
-        val view = inflater.inflate(R.layout.chat_action_bar, null)
+        val view = inflater.inflate(R.layout.chat_activity_action_bar, null)
 
         with (view) {
             loadImage(recipientUserProfilePictureUrl, userIconImageView)

@@ -68,7 +68,7 @@ class MessageAdapter(
                 } else {
                     outcomingPhotoImageView.isVisible = false
                     incomingPhotoImageView.isVisible = true
-                    context.loadImage(message.imageUrl.toString(),outcomingPhotoImageView)
+                    context.loadImage(message.imageUrl.toString(), incomingPhotoImageView)
                 }
             }
         }
