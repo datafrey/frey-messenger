@@ -52,7 +52,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="@string/sign_in_button_text"
-        android:onClick="signInSignUpButtonClick"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"

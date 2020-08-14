@@ -28,4 +28,5 @@
     <string name="profile_name_edit_text_hint">Name (30 symbols max)</string>
     <string name="profile_bio_edit_text_hint">Bio (200 symbols max)</string>
     <string name="empty_repeat_password_field_error_message">You have to repeat the password to avoid mistakes!</string>
+    <string name="too_long_name_error_message">Name must have a maximum of 30 characters!</string>
 </resources>

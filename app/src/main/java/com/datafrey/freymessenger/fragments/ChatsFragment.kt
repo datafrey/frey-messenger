@@ -25,7 +25,6 @@ class ChatsFragment : Fragment() {
     private val auth = FirebaseAuth.getInstance()
     private val usersDatabaseReference = FirebaseDatabase.getInstance().reference
         .child("users")
-    //private lateinit var usersChildEventListener: ChildEventListener
 
     private lateinit var currentUserInfo: User
 
@@ -51,7 +50,7 @@ class ChatsFragment : Fragment() {
             override fun onUserClick(position: Int) = goToChat(position)
         })
 
-        with (userRecyclerView) {
+        userRecyclerView.run {
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(
                 context, DividerItemDecoration.VERTICAL))
@@ -88,7 +87,5 @@ class ChatsFragment : Fragment() {
             override fun onChildRemoved(snapshot: DataSnapshot) {}
 
         })
-
-        //usersDatabaseReference.addChildEventListener(usersChildEventListener)
     }
 }

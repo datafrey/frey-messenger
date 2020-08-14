@@ -57,16 +57,17 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 currentUserInfo = dataSnapshot.getValue(User::class.java)
 
-                root.nameEditText.setText(currentUserInfo?.name)
-                root.bioEditText.setText(currentUserInfo?.bio)
-                context?.loadImage(currentUserInfo?.profilePictureUrl!!, root.profileIconImageView)
+                root.run {
+                    nameEditText.setText(currentUserInfo?.name)
+                    bioEditText.setText(currentUserInfo?.bio)
+                    context?.loadImage(currentUserInfo?.profilePictureUrl!!, profileIconImageView)
+                    idTextView.text = "id: ${firebaseUser.uid}"
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
         })
-
-        root.idTextView.text = "id: ${firebaseUser.uid}"
-
+        
         profileIconImageView = root.profileIconImageView
 
         profileIconImageView.setOnClickListener {
@@ -136,8 +137,8 @@ class ProfileFragment : Fragment() {
             return
         }
 
-        with (currentUserInfo!!) {
-            with (root) {
+        currentUserInfo!!.run {
+            root.run {
                 name = nameEditText.data
                 bio = bioEditText.data
                 profilePictureUrl = downloadUri?.toString() ?: profilePictureUrl

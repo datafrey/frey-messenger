@@ -27,4 +27,5 @@
     <string name="profile_name_edit_text_hint">Имя (максимум 30 символов)</string>
     <string name="profile_bio_edit_text_hint">Био (максимум 200 символов)</string>
     <string name="empty_repeat_password_field_error_message">Вы должны написать пароль повторно, чтобы избежать ошибок!</string>
+    <string name="too_long_name_error_message">Имя должно состоять максимум из 30 символов!</string>
 </resources>
