@@ -4,7 +4,9 @@ import android.net.Uri
 import android.widget.ListView
 import com.datafrey.freymessenger.activities.ChatActivity
 import com.datafrey.freymessenger.adapters.MessageAdapter
+import com.datafrey.freymessenger.model.DbNodeNames
 import com.datafrey.freymessenger.model.Message
+import com.datafrey.freymessenger.model.StorageNodeNames
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -16,11 +18,11 @@ class ChatPresenter(private var view: ChatActivity?) {
 
     private var database = FirebaseDatabase.getInstance()
     private var messagesDatabaseReference = database.reference
-        .child("messages")
+        .child(DbNodeNames.MESSAGES_DB_NODE_NAME)
 
     private var storage = FirebaseStorage.getInstance()
     private var chatImagesStorageReference = storage.reference
-        .child("chat_images")
+        .child(StorageNodeNames.CHAT_IMAGES_STORAGE_NODE_NAME)
 
     private var messageListView: ListView? = null
     private var messageListViewAdapter: MessageAdapter? = null

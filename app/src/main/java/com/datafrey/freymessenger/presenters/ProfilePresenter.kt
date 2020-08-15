@@ -5,6 +5,8 @@ import android.net.Uri
 import android.view.View
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.loadImage
+import com.datafrey.freymessenger.model.DbNodeNames
+import com.datafrey.freymessenger.model.StorageNodeNames
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.toast
 import com.datafrey.freymessenger.userinputvalidation.InputIsEmptyMiddleware
@@ -21,11 +23,12 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 class ProfilePresenter(private var view: View?) {
 
     private val usersDatabaseReference by lazy {
-        FirebaseDatabase.getInstance().getReference("users")
+        FirebaseDatabase.getInstance().getReference(DbNodeNames.USERS_DB_NODE_NAME)
     }
 
     private val profileIconsStorageReference by lazy {
-        FirebaseStorage.getInstance().reference.child("profile_icons")
+        FirebaseStorage.getInstance().reference
+            .child(StorageNodeNames.PROFILE_ICONS_STORAGE_NODE_NAME)
     }
 
     private var currentUserInfo: User? = null

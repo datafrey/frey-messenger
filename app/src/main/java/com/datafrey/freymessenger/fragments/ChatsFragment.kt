@@ -12,21 +12,13 @@ import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.activities.ChatActivity
 import com.datafrey.freymessenger.adapters.UserAdapter
 import com.datafrey.freymessenger.model.User
+import com.datafrey.freymessenger.presenters.ChatsPresenter
 import com.datafrey.freymessenger.startActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chats.view.*
 
 class ChatsFragment : Fragment() {
 
-    private val auth = FirebaseAuth.getInstance()
-    private val usersDatabaseReference = FirebaseDatabase.getInstance().reference
-        .child("users")
-
-    private lateinit var currentUserInfo: User
+    private lateinit var presenter: ChatsPresenter
 
     private val users = mutableListOf<User>()
     private lateinit var userAdapter: UserAdapter
@@ -38,8 +30,12 @@ class ChatsFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_chats, container, false)
 
+        presenter = ChatsPresenter(root, users)
+
         buildRecyclerView(root.userListRecyclerView)
-        attachUserDatabaseReferenceListener()
+
+        presenter.setUserAdapter(userAdapter)
+        presenter.attachUserDatabaseReferenceListener()
 
         return root
     }
@@ -60,39 +56,13 @@ class ChatsFragment : Fragment() {
     }
 
     private fun goToChat(position: Int) {
+        val currentUserInfo = presenter.getCurrentUserInfo()
         context?.startActivity<ChatActivity> {
             putExtra("recipientUserId", users[position].id)
             putExtra("recipientUserName", users[position].name)
             putExtra("recipientUserProfilePictureUrl", users[position].profilePictureUrl)
             putExtra("senderUserName", currentUserInfo.name)
         }
-    }
-
-    private fun attachUserDatabaseReferenceListener() {
-        usersDatabaseReference.addChildEventListener(object: ChildEventListener {
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            }
-
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val user = snapshot.getValue(User::class.java)
-
-                if (user?.id!! != auth.currentUser?.uid) {
-                    users.add(user)
-                    userAdapter.notifyDataSetChanged()
-                } else
-                    currentUserInfo = user
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-            }
-
-        })
     }
 
 }

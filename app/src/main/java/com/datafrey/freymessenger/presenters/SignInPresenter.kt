@@ -3,6 +3,7 @@ package com.datafrey.freymessenger.presenters
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.activities.MainActivity
 import com.datafrey.freymessenger.activities.SignInActivity
+import com.datafrey.freymessenger.model.DbNodeNames
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast
@@ -17,7 +18,9 @@ class SignInPresenter(private var view: SignInActivity?) {
 
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseDatabase.getInstance() }
-    private val usersDatabaseReference by lazy { database.getReference("users") }
+    private val usersDatabaseReference by lazy {
+        database.getReference(DbNodeNames.USERS_DB_NODE_NAME)
+    }
 
     fun detachView() {
         view = null
