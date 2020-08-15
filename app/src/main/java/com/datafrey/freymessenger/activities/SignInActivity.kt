@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
+import com.datafrey.freymessenger.presenters.SignInPresenter
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
@@ -16,7 +17,8 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = SignInPresenter(this)
+        presenter =
+            SignInPresenter(this)
 
         signInSignUpButton.setOnClickListener {
             val email = emailEditText.data

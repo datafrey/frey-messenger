@@ -1,6 +1,8 @@
-package com.datafrey.freymessenger.activities
+package com.datafrey.freymessenger.presenters
 
 import com.datafrey.freymessenger.R
+import com.datafrey.freymessenger.activities.MainActivity
+import com.datafrey.freymessenger.activities.SignInActivity
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast

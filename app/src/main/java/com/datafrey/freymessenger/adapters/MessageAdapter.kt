@@ -82,4 +82,5 @@ class MessageAdapter(
         var outcomingPhotoImageView: ImageView = view.outcomingPhotoImageView
         var outcomingTextTextView: TextView = view.outcomingTextTextView
     }
+
 }

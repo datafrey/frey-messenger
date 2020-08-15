@@ -6,18 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.datafrey.freymessenger.*
+import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.activities.SignInActivity
-import com.datafrey.freymessenger.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
+import com.datafrey.freymessenger.data
+import com.datafrey.freymessenger.presenters.ProfilePresenter
+import com.datafrey.freymessenger.startActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -28,15 +23,10 @@ class ProfileFragment : Fragment() {
         private const val RC_PROFILE_ICON_IMAGE_PICKER = 124
     }
 
-    private val usersDatabaseReference = FirebaseDatabase.getInstance()
-        .getReference("users")
-    private var profileIconsStorageReference = FirebaseStorage.getInstance().reference
-        .child("profile_icons")
+    private lateinit var presenter: ProfilePresenter
 
     private lateinit var profileIconImageView: CircleImageView
     private var pickedProfileImageUri: Uri? = null
-
-    private var currentUserInfo: User? = null
 
     private lateinit var root: View
 
@@ -49,24 +39,7 @@ class ProfileFragment : Fragment() {
         setHasOptionsMenu(true)
 
         root = inflater.inflate(R.layout.fragment_profile, container, false)
-
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val currentUserInfoReference = usersDatabaseReference.child(firebaseUser!!.uid)
-
-        currentUserInfoReference.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                currentUserInfo = dataSnapshot.getValue(User::class.java)
-
-                root.run {
-                    nameEditText.setText(currentUserInfo?.name)
-                    bioEditText.setText(currentUserInfo?.bio)
-                    context?.loadImage(currentUserInfo?.profilePictureUrl!!, profileIconImageView)
-                    idTextView.text = "id: ${firebaseUser.uid}"
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+        presenter = ProfilePresenter(root)
         
         profileIconImageView = root.profileIconImageView
 
@@ -94,20 +67,10 @@ class ProfileFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setMessage(R.string.save_dialog_message)
                     .setPositiveButton(getString(R.string.dialog_positive_answer)) { dialog, _ ->
-                        if (pickedProfileImageUri != null) {
-                            val newProfileIconReference = profileIconsStorageReference
-                                .child(pickedProfileImageUri!!.lastPathSegment.toString())
-
-                            val uploadTask =
-                                newProfileIconReference.putFile(pickedProfileImageUri!!)
-
-                            uploadTask.continueWithTask { newProfileIconReference.downloadUrl }
-                                .addOnCompleteListener { p0 ->
-                                    if (p0.isSuccessful)
-                                        saveChangesInCurrentUserInfo(p0.result!!)
-                                }
-                        } else
-                            saveChangesInCurrentUserInfo()
+                        val name = root.nameEditText.data
+                        val bio = root.bioEditText.data
+                        presenter.saveProfileChanges(name, bio,
+                            pickedProfileImageUri)
                         dialog.dismiss()
                     }
                     .setNegativeButton(getString(R.string.dialog_negative_answer)) { dialog, _ -> dialog.cancel() }
@@ -118,7 +81,7 @@ class ProfileFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setMessage(R.string.sign_out_dialog_message)
                     .setPositiveButton(getString(R.string.dialog_positive_answer)) { dialog, _ ->
-                        FirebaseAuth.getInstance().signOut()
+                        presenter.signOutFromFirebase()
                         startActivity<SignInActivity>()
                         activity?.finish()
                         dialog.dismiss()
@@ -131,24 +94,6 @@ class ProfileFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveChangesInCurrentUserInfo(downloadUri: Uri? = null) {
-        if (root.nameEditText.data.isEmpty()) {
-            context?.toast(getString(R.string.empty_name_field_error_message), Toast.LENGTH_LONG)
-            return
-        }
-
-        currentUserInfo!!.run {
-            root.run {
-                name = nameEditText.data
-                bio = bioEditText.data
-                profilePictureUrl = downloadUri?.toString() ?: profilePictureUrl
-            }
-        }
-
-        usersDatabaseReference.child(currentUserInfo?.id!!).setValue(currentUserInfo)
-        context?.toast(getString(R.string.profile_changes_saved_message))
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -157,4 +102,10 @@ class ProfileFragment : Fragment() {
             profileIconImageView.run { setImageURI(data.data) }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+    }
+
 }

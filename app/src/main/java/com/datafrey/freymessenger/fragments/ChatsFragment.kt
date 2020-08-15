@@ -70,9 +70,14 @@ class ChatsFragment : Fragment() {
 
     private fun attachUserDatabaseReferenceListener() {
         usersDatabaseReference.addChildEventListener(object: ChildEventListener {
-            override fun onCancelled(error: DatabaseError) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val user = snapshot.getValue(User::class.java)
@@ -84,8 +89,10 @@ class ChatsFragment : Fragment() {
                     currentUserInfo = user
             }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
 
         })
     }
+
 }
