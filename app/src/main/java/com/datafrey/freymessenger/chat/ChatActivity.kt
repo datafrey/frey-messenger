@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.activities
+package com.datafrey.freymessenger.chat
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -10,12 +10,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.datafrey.freymessenger.R
-import com.datafrey.freymessenger.adapters.MessageAdapter
 import com.datafrey.freymessenger.data
 import com.datafrey.freymessenger.loadImage
-import com.datafrey.freymessenger.model.Message
-import com.datafrey.freymessenger.presenters.ChatPresenter
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_activity_action_bar.view.*
 
@@ -31,27 +29,21 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
     private lateinit var recipientUserName: String
     private lateinit var recipientUserProfilePictureUrl: String
 
-    private var messages = mutableListOf<Message>()
-    private lateinit var messageListViewAdapter: MessageAdapter
-
     private var layoutIsChangingByUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         presenter = ChatPresenter(this)
-        presenter.setMessageListView(messageListView)
 
         readIntentInfo()
         setupActionBar()
-        setupMessageListView()
+        setupMessageRecyclerView()
         setupSendMessageLayout()
-
-        presenter.attachMessagesDatabaseReferenceChildEventListener()
     }
 
     private fun readIntentInfo() {
-        with(intent) {
+        with (intent) {
             senderUserName = getStringExtra("senderUserName").toString()
             recipientUserName = getStringExtra("recipientUserName").toString()
             recipientUserProfilePictureUrl = getStringExtra("recipientUserProfilePictureUrl").toString()
@@ -60,6 +52,7 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun setupActionBar() {
         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)
                 as LayoutInflater
@@ -79,15 +72,15 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setupMessageListView() {
-        messageListViewAdapter = MessageAdapter(this, R.layout.message_item, messages)
-
-        with (messageListView) {
-            adapter = messageListViewAdapter
+    private fun setupMessageRecyclerView() {
+        with (messageRecyclerView) {
+            adapter = presenter.getMessageAdapter()
+            layoutManager = LinearLayoutManager(context)
 
             addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-                if (!layoutIsChangingByUser)
-                    messageListView.post { messageListView.setSelection(messageListView.count - 1) }
+                if (!layoutIsChangingByUser) {
+                    scrollToPosition(presenter.getMessages().size - 1)
+                }
             }
 
             setOnTouchListener { _, _ ->
@@ -95,8 +88,6 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
                 false
             }
         }
-
-        presenter.setMessageListViewAdapter(messageListViewAdapter)
     }
 
     private fun setupSendMessageLayout() {
@@ -113,6 +104,10 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
         })
 
         sendMessageButton.setOnClickListener {
+            layoutIsChangingByUser = true
+            messageRecyclerView.smoothScrollToPosition(
+                presenter.getMessages().size)
+
             val text = messageEditText.data
             presenter.sendText(text)
 

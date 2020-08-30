@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.activities
+package com.datafrey.freymessenger.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

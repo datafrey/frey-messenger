@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.activities
+package com.datafrey.freymessenger.signin
 
 import android.os.Bundle
 import android.view.View
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
-import com.datafrey.freymessenger.presenters.SignInPresenter
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
@@ -17,8 +16,7 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter =
-            SignInPresenter(this)
+        presenter = SignInPresenter(this)
 
         signInSignUpButton.setOnClickListener {
             val email = emailEditText.data
@@ -35,11 +33,6 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
-    }
-
     fun toggleModeTextViewClick(view: View) {
         repeatPasswordEditText.isVisible = !repeatPasswordEditText.isVisible
         nameEditText.isVisible = !nameEditText.isVisible
@@ -52,6 +45,11 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
             toggleSignInSignUpTextView.text = getString(R.string.toggle_mode_text_view_sign_in_mode_text)
         }
         signInModeActive = !signInModeActive
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
     }
 
 }

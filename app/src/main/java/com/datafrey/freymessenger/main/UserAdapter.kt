@@ -1,6 +1,5 @@
-package com.datafrey.freymessenger.adapters
+package com.datafrey.freymessenger.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,33 +10,30 @@ import com.datafrey.freymessenger.model.User
 import kotlinx.android.synthetic.main.user_item.view.*
 
 class UserAdapter(
-    private val context: Context,
-    var users: List<User>
+    private val view: View,
+    private var users: List<User>
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
-    private lateinit var listener: OnUserClickListener
+    private var userItemEventListener: UserItemEventListener? = null
 
-    interface OnUserClickListener {
-        fun onUserClick(position: Int)
-    }
-
-    fun setOnUserClickListener(listener: OnUserClickListener) {
-        this.listener = listener
+    fun setUserItemEventListener(userItemEventListener: UserItemEventListener) {
+        this.userItemEventListener = userItemEventListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         UserViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.user_item, parent, false), listener)
+            .inflate(R.layout.user_item, parent, false), userItemEventListener)
 
     override fun getItemCount() = users.size
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         with(users[position]) {
             with(holder) {
-                if (profilePictureUrl.isNotEmpty())
-                    context.loadImage(profilePictureUrl, userIconImageView)
-                else
+                if (profilePictureUrl.isNotEmpty()) {
+                    view.context.loadImage(profilePictureUrl, userIconImageView)
+                } else {
                     userIconImageView.setImageResource(R.drawable.logo)
+                }
 
                 userNameTextView.text = name
             }
@@ -46,7 +42,7 @@ class UserAdapter(
 
     class UserViewHolder(
         itemView: View,
-        listener: OnUserClickListener
+        listener: UserItemEventListener?
     ) : RecyclerView.ViewHolder(itemView) {
         var userIconImageView = itemView.userIconImageView!!
         var userNameTextView = itemView.userNameTextView!!
@@ -55,10 +51,14 @@ class UserAdapter(
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onUserClick(position)
+                    listener?.onClick(position)
                 }
             }
         }
     }
 
+}
+
+interface UserItemEventListener {
+    fun onClick(position: Int)
 }

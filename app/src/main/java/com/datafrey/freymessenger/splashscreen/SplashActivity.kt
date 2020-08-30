@@ -1,7 +1,9 @@
-package com.datafrey.freymessenger.activities
+package com.datafrey.freymessenger.splashscreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.datafrey.freymessenger.main.MainActivity
+import com.datafrey.freymessenger.signin.SignInActivity
 import com.datafrey.freymessenger.startActivity
 import com.google.firebase.auth.FirebaseAuth
 

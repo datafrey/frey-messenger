@@ -1,8 +1,7 @@
-package com.datafrey.freymessenger.presenters
+package com.datafrey.freymessenger.main
 
 import android.view.View
-import com.datafrey.freymessenger.adapters.UserAdapter
-import com.datafrey.freymessenger.model.DbNodeNames
+import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -10,26 +9,21 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 
-class ChatsPresenter(
-    private var view: View?,
-    private var users: MutableList<User>
-) {
+class ChatsPresenter(private var view: View?) {
 
-    private val auth = FirebaseAuth.getInstance()
-    private val usersDatabaseReference = FirebaseDatabase.getInstance().reference
-        .child(DbNodeNames.USERS_DB_NODE_NAME)
+    private val usersDatabaseReference = FirebaseDatabase.getInstance()
+        .reference.child(DatabaseNodeNames.USERS_DB_NODE_NAME)
+
+    private var users = mutableListOf<User>()
+    private var userAdapter = UserAdapter(view!!, users)
 
     private lateinit var currentUserInfo: User
 
-    private lateinit var userAdapter: UserAdapter
-
-    fun setUserAdapter(userAdapter: UserAdapter) {
-        this.userAdapter = userAdapter
+    init {
+        attachUserDatabaseReferenceListener()
     }
 
-    fun getCurrentUserInfo() = currentUserInfo
-
-    fun attachUserDatabaseReferenceListener() {
+    private fun attachUserDatabaseReferenceListener() {
         usersDatabaseReference.addChildEventListener(object: ChildEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
@@ -43,7 +37,8 @@ class ChatsPresenter(
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val user = snapshot.getValue(User::class.java)
 
-                if (user?.id!! != auth.currentUser?.uid) {
+                val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+                if (user?.id!! != currentUserId) {
                     users.add(user)
                     userAdapter.notifyDataSetChanged()
                 } else {
@@ -54,6 +49,16 @@ class ChatsPresenter(
             override fun onChildRemoved(snapshot: DataSnapshot) {
             }
         })
+    }
+
+    fun getUsers() = users
+
+    fun getUserAdapter() = userAdapter
+
+    fun getCurrentUserInfo() = currentUserInfo
+
+    fun detachView() {
+        view = null
     }
 
 }

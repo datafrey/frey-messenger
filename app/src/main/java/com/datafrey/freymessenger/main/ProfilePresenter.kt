@@ -1,11 +1,11 @@
-package com.datafrey.freymessenger.presenters
+package com.datafrey.freymessenger.main
 
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.View
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.loadImage
-import com.datafrey.freymessenger.model.DbNodeNames
+import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.StorageNodeNames
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.toast
@@ -23,12 +23,13 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 class ProfilePresenter(private var view: View?) {
 
     private val usersDatabaseReference by lazy {
-        FirebaseDatabase.getInstance().getReference(DbNodeNames.USERS_DB_NODE_NAME)
+        FirebaseDatabase.getInstance()
+            .getReference(DatabaseNodeNames.USERS_DB_NODE_NAME)
     }
 
     private val profileIconsStorageReference by lazy {
-        FirebaseStorage.getInstance().reference
-            .child(StorageNodeNames.PROFILE_ICONS_STORAGE_NODE_NAME)
+        FirebaseStorage.getInstance()
+            .reference.child(StorageNodeNames.PROFILE_ICONS_STORAGE_NODE_NAME)
     }
 
     private var currentUserInfo: User? = null
@@ -41,12 +42,13 @@ class ProfilePresenter(private var view: View?) {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 currentUserInfo = dataSnapshot.getValue(User::class.java)
-
                 view!!.run {
-                    nameEditText.setText(currentUserInfo?.name)
-                    bioEditText.setText(currentUserInfo?.bio)
-                    context?.loadImage(currentUserInfo?.profilePictureUrl!!, profileIconImageView)
-                    idTextView.text = "id: ${firebaseUser.uid}"
+                    currentUserInfo!!.run {
+                        nameEditText.setText(name)
+                        bioEditText.setText(bio)
+                        context?.loadImage(profilePictureUrl, profileIconImageView)
+                        idTextView.text = "id: $id"
+                    }
                 }
             }
 
@@ -55,15 +57,32 @@ class ProfilePresenter(private var view: View?) {
         })
     }
 
-    fun detachView() {
-        view = null
-    }
-
     fun saveProfileChanges(
         name: String,
         bio: String,
         pickedProfileImageUri: Uri?
     ) {
+        if (profileInputIsValid(name, bio)) {
+            if (pickedProfileImageUri != null) {
+                val newProfileIconReference = profileIconsStorageReference
+                    .child(pickedProfileImageUri.lastPathSegment.toString())
+
+                val uploadTask =
+                    newProfileIconReference.putFile(pickedProfileImageUri)
+
+                uploadTask.continueWithTask { newProfileIconReference.downloadUrl }
+                    .addOnCompleteListener { p0 ->
+                        if (p0.isSuccessful) {
+                            saveChangesInCurrentUserInfo(name, bio, p0.result!!)
+                        }
+                    }
+            } else {
+                saveChangesInCurrentUserInfo(name, bio)
+            }
+        }
+    }
+
+    private fun profileInputIsValid(name: String, bio: String): Boolean {
         val nameValidator = InputIsEmptyMiddleware()
         nameValidator.linkWith(InputIsTooLongMiddleware(30))
         val bioValidator = InputIsTooLongMiddleware(200)
@@ -71,41 +90,34 @@ class ProfilePresenter(private var view: View?) {
         val nameValidationResult = nameValidator.check(name)
         val bioValidationResult = bioValidator.check(bio)
 
-        when (nameValidationResult) {
-            InputValidationResult.INPUT_IS_EMPTY -> {
-                view!!.context.toast(R.string.empty_name_field_error_message)
-                return
-            }
-
-            InputValidationResult.INPUT_IS_TOO_LONG -> {
-                view!!.context.toast(R.string.too_long_name_error_message)
-                return
-            }
-        }
-
-        when (bioValidationResult) {
-            InputValidationResult.INPUT_IS_TOO_LONG -> {
-                view!!.context.toast(R.string.too_long_bio_error_message)
-                return
-            }
-        }
-
-        if (pickedProfileImageUri != null) {
-            val newProfileIconReference = profileIconsStorageReference
-                .child(pickedProfileImageUri.lastPathSegment.toString())
-
-            val uploadTask =
-                newProfileIconReference.putFile(pickedProfileImageUri)
-
-            uploadTask.continueWithTask { newProfileIconReference.downloadUrl }
-                .addOnCompleteListener { p0 ->
-                    if (p0.isSuccessful) {
-                        saveChangesInCurrentUserInfo(name, bio, p0.result!!)
-                    }
+        with(view!!.context) {
+            when (nameValidationResult) {
+                InputValidationResult.INPUT_IS_EMPTY -> {
+                    toast(R.string.empty_name_field_error_message)
+                    return false
                 }
-        } else {
-            saveChangesInCurrentUserInfo(name, bio)
+
+                InputValidationResult.INPUT_IS_TOO_LONG -> {
+                    toast(R.string.too_long_name_error_message)
+                    return false
+                }
+
+                else -> {
+                }
+            }
+
+            when (bioValidationResult) {
+                InputValidationResult.INPUT_IS_TOO_LONG -> {
+                    toast(R.string.too_long_bio_error_message)
+                    return false
+                }
+
+                else -> {
+                }
+            }
         }
+
+        return true
     }
 
     private fun saveChangesInCurrentUserInfo(name: String, bio: String, downloadUri: Uri? = null) {
@@ -120,5 +132,9 @@ class ProfilePresenter(private var view: View?) {
     }
 
     fun signOutFromFirebase() = FirebaseAuth.getInstance().signOut()
+
+    fun detachView() {
+        view = null
+    }
 
 }

@@ -1,9 +1,8 @@
-package com.datafrey.freymessenger.presenters
+package com.datafrey.freymessenger.signin
 
 import com.datafrey.freymessenger.R
-import com.datafrey.freymessenger.activities.MainActivity
-import com.datafrey.freymessenger.activities.SignInActivity
-import com.datafrey.freymessenger.model.DbNodeNames
+import com.datafrey.freymessenger.main.MainActivity
+import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast
@@ -17,13 +16,9 @@ import com.google.firebase.database.FirebaseDatabase
 class SignInPresenter(private var view: SignInActivity?) {
 
     private val auth by lazy { FirebaseAuth.getInstance() }
-    private val database by lazy { FirebaseDatabase.getInstance() }
     private val usersDatabaseReference by lazy {
-        database.getReference(DbNodeNames.USERS_DB_NODE_NAME)
-    }
-
-    fun detachView() {
-        view = null
+        FirebaseDatabase.getInstance()
+            .getReference(DatabaseNodeNames.USERS_DB_NODE_NAME)
     }
 
     fun signInToFirebase(email: String, password: String) {
@@ -81,6 +76,9 @@ class SignInPresenter(private var view: SignInActivity?) {
                 view!!.toast(R.string.empty_email_field_error_message)
                 return false
             }
+
+            else -> {
+            }
         }
 
         when (passwordValidationResult) {
@@ -92,6 +90,9 @@ class SignInPresenter(private var view: SignInActivity?) {
             InputValidationResult.INPUT_IS_TOO_SHORT -> {
                 view!!.toast(R.string.too_short_password_error_message)
                 return false
+            }
+
+            else -> {
             }
         }
 
@@ -118,6 +119,9 @@ class SignInPresenter(private var view: SignInActivity?) {
                     view!!.toast(R.string.empty_repeat_password_field_error_message)
                     return false
                 }
+
+                else -> {
+                }
             }
 
             if (password != repeatPassword) {
@@ -135,12 +139,19 @@ class SignInPresenter(private var view: SignInActivity?) {
                     view!!.toast(R.string.too_long_name_error_message)
                     return false
                 }
+
+                else -> {
+                }
             }
         } else {
             return false
         }
 
         return true
+    }
+
+    fun detachView() {
+        view = null
     }
 
 }

@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.fragments
+package com.datafrey.freymessenger.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -9,11 +9,9 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.datafrey.freymessenger.R
-import com.datafrey.freymessenger.activities.SignInActivity
 import com.datafrey.freymessenger.data
-import com.datafrey.freymessenger.presenters.ProfilePresenter
+import com.datafrey.freymessenger.signin.SignInActivity
 import com.datafrey.freymessenger.startActivity
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 
@@ -23,12 +21,10 @@ class ProfileFragment : Fragment() {
         private const val RC_PROFILE_ICON_IMAGE_PICKER = 124
     }
 
+    private lateinit var root: View
     private lateinit var presenter: ProfilePresenter
 
-    private lateinit var profileIconImageView: CircleImageView
     private var pickedProfileImageUri: Uri? = null
-
-    private lateinit var root: View
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -37,13 +33,11 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-
         root = inflater.inflate(R.layout.fragment_profile, container, false)
-        presenter = ProfilePresenter(root)
-        
-        profileIconImageView = root.profileIconImageView
 
-        profileIconImageView.setOnClickListener {
+        presenter = ProfilePresenter(root)
+
+        root.profileIconImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
@@ -99,7 +93,7 @@ class ProfileFragment : Fragment() {
 
         if (requestCode == RC_PROFILE_ICON_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
             pickedProfileImageUri = data?.data!!
-            profileIconImageView.run { setImageURI(data.data) }
+            root.profileIconImageView.run { setImageURI(data.data) }
         }
     }
 
