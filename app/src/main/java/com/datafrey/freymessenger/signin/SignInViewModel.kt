@@ -1,11 +1,12 @@
 package com.datafrey.freymessenger.signin
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
-import com.datafrey.freymessenger.main.MainActivity
 import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.User
-import com.datafrey.freymessenger.startActivity
-import com.datafrey.freymessenger.toast
 import com.datafrey.freymessenger.userinputvalidation.InputIsEmptyMiddleware
 import com.datafrey.freymessenger.userinputvalidation.InputIsTooLongMiddleware
 import com.datafrey.freymessenger.userinputvalidation.InputIsTooShortMiddleware
@@ -13,7 +14,7 @@ import com.datafrey.freymessenger.userinputvalidation.InputValidationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-class SignInPresenter(private var view: SignInActivity?) {
+class SignInViewModel : ViewModel() {
 
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val usersDatabaseReference by lazy {
@@ -21,16 +22,19 @@ class SignInPresenter(private var view: SignInActivity?) {
             .getReference(DatabaseNodeNames.USERS_DB_NODE_NAME)
     }
 
+    private val _signInSuccessful = MutableLiveData<Boolean>()
+    val signInSuccessful: LiveData<Boolean>
+        get() = _signInSuccessful
+
+    private val _userInputErrorMessage = MutableLiveData<Int>()
+    val userInputErrorMessage: LiveData<Int>
+        get() = _userInputErrorMessage
+
     fun signInToFirebase(email: String, password: String) {
         if (signInInputIsValid(email, password)) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        view!!.startActivity<MainActivity>()
-                        view!!.finish()
-                    } else {
-                        view!!.toast(R.string.authentication_failed_error_message)
-                    }
+                    _signInSuccessful.value = task.isSuccessful
                 }
         }
     }
@@ -53,12 +57,8 @@ class SignInPresenter(private var view: SignInActivity?) {
                         )
 
                         usersDatabaseReference.child(firebaseUser.uid).setValue(user)
-
-                        view!!.startActivity<MainActivity>()
-                        view!!.finish()
-                    } else {
-                        view!!.toast(R.string.authentication_failed_error_message)
                     }
+                    _signInSuccessful.value = task.isSuccessful
                 }
         }
     }
@@ -73,7 +73,7 @@ class SignInPresenter(private var view: SignInActivity?) {
 
         when (emailValidationResult) {
             InputValidationResult.INPUT_IS_EMPTY -> {
-                view!!.toast(R.string.empty_email_field_error_message)
+                _userInputErrorMessage.value = R.string.empty_email_field_error_message
                 return false
             }
 
@@ -83,12 +83,12 @@ class SignInPresenter(private var view: SignInActivity?) {
 
         when (passwordValidationResult) {
             InputValidationResult.INPUT_IS_EMPTY -> {
-                view!!.toast(R.string.empty_password_field_error_message)
+                _userInputErrorMessage.value = R.string.empty_password_field_error_message
                 return false
             }
 
             InputValidationResult.INPUT_IS_TOO_SHORT -> {
-                view!!.toast(R.string.too_short_password_error_message)
+                _userInputErrorMessage.value = R.string.too_short_password_error_message
                 return false
             }
 
@@ -106,52 +106,56 @@ class SignInPresenter(private var view: SignInActivity?) {
         name: String
     ): Boolean {
         val emailAndPasswordAreValid = signInInputIsValid(email, password)
-        if (emailAndPasswordAreValid) {
-            val repeatPasswordValidator = InputIsEmptyMiddleware()
-            val nameValidator = InputIsEmptyMiddleware()
-            nameValidator.linkWith(InputIsTooLongMiddleware(30))
+        if (emailAndPasswordAreValid) return false
 
-            val repeatPasswordValidationResult = repeatPasswordValidator.check(repeatPassword)
-            val nameValidationResult = nameValidator.check(name)
+        val repeatPasswordValidator = InputIsEmptyMiddleware()
+        val nameValidator = InputIsEmptyMiddleware()
+        nameValidator.linkWith(InputIsTooLongMiddleware(30))
 
-            when (repeatPasswordValidationResult) {
-                InputValidationResult.INPUT_IS_EMPTY -> {
-                    view!!.toast(R.string.empty_repeat_password_field_error_message)
-                    return false
-                }
+        val repeatPasswordValidationResult = repeatPasswordValidator.check(repeatPassword)
+        val nameValidationResult = nameValidator.check(name)
 
-                else -> {
-                }
-            }
-
-            if (password != repeatPassword) {
-                view!!.toast(R.string.passwords_dont_match_error_message)
+        when (repeatPasswordValidationResult) {
+            InputValidationResult.INPUT_IS_EMPTY -> {
+                _userInputErrorMessage.value = R.string.empty_repeat_password_field_error_message
                 return false
             }
 
-            when (nameValidationResult) {
-                InputValidationResult.INPUT_IS_EMPTY -> {
-                    view!!.toast(R.string.empty_name_field_error_message)
-                    return false
-                }
-
-                InputValidationResult.INPUT_IS_TOO_LONG -> {
-                    view!!.toast(R.string.too_long_name_error_message)
-                    return false
-                }
-
-                else -> {
-                }
+            else -> {
             }
-        } else {
+        }
+
+        if (password != repeatPassword) {
+            _userInputErrorMessage.value = R.string.passwords_dont_match_error_message
             return false
+        }
+
+        when (nameValidationResult) {
+            InputValidationResult.INPUT_IS_EMPTY -> {
+                _userInputErrorMessage.value = R.string.empty_name_field_error_message
+                return false
+            }
+
+            InputValidationResult.INPUT_IS_TOO_LONG -> {
+                _userInputErrorMessage.value = R.string.too_long_name_error_message
+                return false
+            }
+
+            else -> {
+            }
         }
 
         return true
     }
 
-    fun detachView() {
-        view = null
+    class SignInViewModelFactory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
+                return SignInViewModel() as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 
 }

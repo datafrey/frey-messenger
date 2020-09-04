@@ -4,31 +4,50 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
+import com.datafrey.freymessenger.main.MainActivity
+import com.datafrey.freymessenger.signin.SignInViewModel.SignInViewModelFactory
+import com.datafrey.freymessenger.startActivity
+import com.datafrey.freymessenger.toast
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
 
     private var signInModeActive = true
-    private lateinit var presenter: SignInPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = SignInPresenter(this)
+        val viewModel = ViewModelProvider(this, SignInViewModelFactory())
+            .get(SignInViewModel::class.java)
+
+        viewModel.userInputErrorMessage.observe(this, Observer {
+            toast(it)
+        })
+
+        viewModel.signInSuccessful.observe(this, Observer {
+            if (it) {
+                startActivity<MainActivity>()
+                finish()
+            } else {
+                toast(R.string.authentication_failed_error_message)
+            }
+        })
 
         signInSignUpButton.setOnClickListener {
             val email = emailEditText.data
             val password = passwordEditText.data
 
             if (signInModeActive) {
-                presenter.signInToFirebase(email, password)
+                viewModel.signInToFirebase(email, password)
             } else {
                 val repeatPassword = repeatPasswordEditText.data
                 val name = nameEditText.data
 
-                presenter.signUpToFirebase(email, password, repeatPassword, name)
+                viewModel.signUpToFirebase(email, password, repeatPassword, name)
             }
         }
     }
@@ -45,11 +64,6 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
             toggleSignInSignUpTextView.text = getString(R.string.toggle_mode_text_view_sign_in_mode_text)
         }
         signInModeActive = !signInModeActive
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
     }
 
 }
