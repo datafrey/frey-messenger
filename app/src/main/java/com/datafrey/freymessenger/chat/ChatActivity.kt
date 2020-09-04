@@ -25,7 +25,6 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
 
     private lateinit var presenter: ChatPresenter
 
-    private lateinit var senderUserName: String
     private lateinit var recipientUserName: String
     private lateinit var recipientUserProfilePictureUrl: String
 
@@ -44,7 +43,6 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
 
     private fun readIntentInfo() {
         with (intent) {
-            senderUserName = getStringExtra("senderUserName").toString()
             recipientUserName = getStringExtra("recipientUserName").toString()
             recipientUserProfilePictureUrl = getStringExtra("recipientUserProfilePictureUrl").toString()
 
