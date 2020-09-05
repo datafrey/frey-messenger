@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
 import com.datafrey.freymessenger.databinding.FragmentProfileBinding
+import com.datafrey.freymessenger.main.ProfileViewModel.ProfileViewModelFactory
 import com.datafrey.freymessenger.signin.SignInActivity
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast
@@ -40,7 +41,7 @@ class ProfileFragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_profile, container, false)
         val binding = FragmentProfileBinding.bind(root)
 
-        viewModel = ViewModelProvider(this, ProfileViewModel.ProfileViewModelFactory())
+        viewModel = ViewModelProvider(this, ProfileViewModelFactory())
             .get(ProfileViewModel::class.java)
 
         viewModel.currentUser.observe(viewLifecycleOwner, Observer {

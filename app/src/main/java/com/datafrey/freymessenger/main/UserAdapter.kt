@@ -24,13 +24,18 @@ class UserAdapter(
 
     override fun getItemCount() = users.size
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.binding.user = users[position]
-        holder.binding.userItemEventListener = userItemEventListener
-    }
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
+        holder.bindUser(users[position], userItemEventListener)
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding = UserItemBinding.bind(itemView)
+
+        private val binding = UserItemBinding.bind(itemView)
+
+        fun bindUser(user: User, userItemEventListener: UserItemEventListener?) {
+            binding.user = user
+            binding.userItemEventListener = userItemEventListener
+        }
+
     }
 
 }

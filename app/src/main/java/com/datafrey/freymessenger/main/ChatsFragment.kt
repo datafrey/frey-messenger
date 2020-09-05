@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.chat.ChatActivity
+import com.datafrey.freymessenger.main.ChatsViewModel.ChatsViewModelFactory
 import com.datafrey.freymessenger.model.User
 import com.datafrey.freymessenger.startActivity
 import kotlinx.android.synthetic.main.fragment_chats.view.*
@@ -26,7 +27,7 @@ class ChatsFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_chats, container, false)
 
-        viewModel = ViewModelProvider(this, ChatsViewModel.ChatsViewModelFactory())
+        viewModel = ViewModelProvider(this, ChatsViewModelFactory())
             .get(ChatsViewModel::class.java)
 
         buildRecyclerView(root.userRecyclerView)

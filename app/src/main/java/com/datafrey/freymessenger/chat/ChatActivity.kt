@@ -10,8 +10,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.datafrey.freymessenger.R
+import com.datafrey.freymessenger.chat.ChatViewModel.ChatViewModelFactory
 import com.datafrey.freymessenger.data
 import com.datafrey.freymessenger.loadImage
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -23,7 +25,7 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
         private const val RC_SEND_IMAGE_IMAGE_PICKER = 123
     }
 
-    private lateinit var presenter: ChatPresenter
+    private lateinit var viewModel: ChatViewModel
 
     private lateinit var recipientUserName: String
     private lateinit var recipientUserProfilePictureUrl: String
@@ -33,7 +35,8 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = ChatPresenter(this)
+        viewModel = ViewModelProvider(this, ChatViewModelFactory())
+            .get(ChatViewModel::class.java)
 
         readIntentInfo()
         setupActionBar()
@@ -46,7 +49,7 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
             recipientUserName = getStringExtra("recipientUserName").toString()
             recipientUserProfilePictureUrl = getStringExtra("recipientUserProfilePictureUrl").toString()
 
-            presenter.setRecipientUserId(getStringExtra("recipientUserId").toString())
+            viewModel.setRecipientUserId(getStringExtra("recipientUserId").toString())
         }
     }
 
@@ -72,12 +75,12 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupMessageRecyclerView() {
         with (messageRecyclerView) {
-            adapter = presenter.getMessageAdapter()
+            adapter = viewModel.getMessageAdapter()
             layoutManager = LinearLayoutManager(context)
 
             addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
                 if (!layoutIsChangingByUser) {
-                    scrollToPosition(presenter.getMessages().size - 1)
+                    scrollToPosition(viewModel.getMessageListSize() - 1)
                 }
             }
 
@@ -104,10 +107,10 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
         sendMessageButton.setOnClickListener {
             layoutIsChangingByUser = true
             messageRecyclerView.smoothScrollToPosition(
-                presenter.getMessages().size)
+                viewModel.getMessageListSize())
 
             val text = messageEditText.data
-            presenter.sendText(text)
+            viewModel.sendText(text)
 
             messageEditText.setText("")
         }
@@ -128,13 +131,8 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
 
         if (requestCode == RC_SEND_IMAGE_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
             val selectedImageUri: Uri? = data?.data
-            presenter.sendImage(selectedImageUri)
+            viewModel.sendImage(selectedImageUri)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
     }
 
 }

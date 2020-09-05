@@ -1,69 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_margin="2dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/incomingPhotoImageView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/incoming_speech_bubble"
-        android:lineSpacingExtra="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:paddingStart="20dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"/>
+    <data>
 
-    <TextView
-        android:id="@+id/incomingTextTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/incoming_speech_bubble"
-        android:lineSpacingExtra="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:maxWidth="300dp"
-        android:paddingStart="20dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"/>
+        <variable
+            name="message"
+            type="com.datafrey.freymessenger.model.Message" />
 
-    <ImageView
-        android:id="@+id/outcomingPhotoImageView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/outgoing_speach_bubble"
-        android:lineSpacingExtra="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="8dp"
-        android:paddingStart="10dp"
-        android:paddingBottom="10dp"
-        android:layout_alignParentEnd="true"/>
+        <import type="android.view.View" />
 
-    <TextView
-        android:id="@+id/outcomingTextTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/outgoing_speach_bubble"
-        android:lineSpacingExtra="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:maxWidth="300dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="4dp"
-        android:paddingStart="10dp"
-        android:paddingBottom="10dp"
-        android:layout_alignParentEnd="true"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"/>
+        <variable
+            name="isIncomingImageMessage"
+            type="Boolean" />
 
-</RelativeLayout>
+        <variable
+            name="isIncomingTextMessage"
+            type="Boolean" />
+
+        <variable
+            name="isOutcomingImageMessage"
+            type="Boolean" />
+
+        <variable
+            name="isOutcomingTextMessage"
+            type="Boolean" />
+
+    </data>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/incomingPhotoImageView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/incoming_speech_bubble"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:paddingStart="20dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
+            android:visibility="@{isIncomingImageMessage ? View.VISIBLE : View.GONE}"
+            url="@{isIncomingImageMessage ? message.imageUrl : null}"/>
+
+        <TextView
+            android:id="@+id/incomingTextTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/incoming_speech_bubble"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:maxWidth="300dp"
+            android:paddingStart="20dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:visibility="@{isIncomingTextMessage ? View.VISIBLE : View.GONE}"
+            android:text="@{isIncomingTextMessage ? message.text : null}"/>
+
+        <ImageView
+            android:id="@+id/outcomingPhotoImageView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/outgoing_speach_bubble"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingStart="10dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentEnd="true"
+            android:visibility="@{isOutcomingImageMessage ? View.VISIBLE : View.GONE}"
+            url="@{isOutcomingImageMessage ? message.imageUrl : null}"/>
+
+        <TextView
+            android:id="@+id/outcomingTextTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/outgoing_speach_bubble"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:maxWidth="300dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="4dp"
+            android:paddingStart="10dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentEnd="true"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:visibility="@{isOutcomingTextMessage ? View.VISIBLE : View.GONE}"
+            android:text="@{isOutcomingTextMessage ? message.text : null}"/>
+
+    </RelativeLayout>
+</layout>

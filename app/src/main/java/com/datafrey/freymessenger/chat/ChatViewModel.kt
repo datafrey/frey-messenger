@@ -1,6 +1,8 @@
 package com.datafrey.freymessenger.chat
 
 import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.Message
 import com.datafrey.freymessenger.model.StorageNodeNames
@@ -11,13 +13,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 
-class ChatPresenter(private var view: ChatActivity?) {
+class ChatViewModel : ViewModel() {
 
-    private var messagesDatabaseReference = FirebaseDatabase.getInstance()
+    private val messagesDatabaseReference = FirebaseDatabase.getInstance()
         .reference.child(DatabaseNodeNames.MESSAGES_DB_NODE_NAME)
 
-    private var chatImagesStorageReference = FirebaseStorage.getInstance()
-        .reference.child(StorageNodeNames.CHAT_IMAGES_STORAGE_NODE_NAME)
+    private val chatImagesStorageReference by lazy {
+        FirebaseStorage.getInstance()
+            .reference.child(StorageNodeNames.CHAT_IMAGES_STORAGE_NODE_NAME)
+    }
 
     private var messages = mutableListOf<Message>()
     private var messageAdapter = MessageAdapter()
@@ -25,6 +29,14 @@ class ChatPresenter(private var view: ChatActivity?) {
     private var senderUserId = FirebaseAuth.getInstance()
         .currentUser?.uid.toString()
     private lateinit var recipientUserId: String
+
+    fun setRecipientUserId(recipientUserId: String) {
+        this.recipientUserId = recipientUserId
+    }
+
+    fun getMessageListSize() = messages.size
+
+    fun getMessageAdapter() = messageAdapter
 
     init {
         messageAdapter.submitList(messages)
@@ -58,14 +70,6 @@ class ChatPresenter(private var view: ChatActivity?) {
             override fun onChildRemoved(snapshot: DataSnapshot) {
             }
         })
-    }
-
-    fun getMessages(): List<Message> = messages
-
-    fun getMessageAdapter() = messageAdapter
-
-    fun setRecipientUserId(recipientUserId: String) {
-        this.recipientUserId = recipientUserId
     }
 
     fun sendText(text: String) {
@@ -103,8 +107,14 @@ class ChatPresenter(private var view: ChatActivity?) {
             }
     }
 
-    fun detachView() {
-        view = null
+    class ChatViewModelFactory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
+                return ChatViewModel() as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 
 }
