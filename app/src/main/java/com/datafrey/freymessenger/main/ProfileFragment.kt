@@ -8,10 +8,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
+import com.datafrey.freymessenger.databinding.FragmentProfileBinding
 import com.datafrey.freymessenger.signin.SignInActivity
 import com.datafrey.freymessenger.startActivity
+import com.datafrey.freymessenger.toast
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 
@@ -22,7 +26,7 @@ class ProfileFragment : Fragment() {
     }
 
     private lateinit var root: View
-    private lateinit var presenter: ProfilePresenter
+    private lateinit var viewModel: ProfileViewModel
 
     private var pickedProfileImageUri: Uri? = null
 
@@ -34,8 +38,25 @@ class ProfileFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         root = inflater.inflate(R.layout.fragment_profile, container, false)
+        val binding = FragmentProfileBinding.bind(root)
 
-        presenter = ProfilePresenter(root)
+        viewModel = ViewModelProvider(this, ProfileViewModel.ProfileViewModelFactory())
+            .get(ProfileViewModel::class.java)
+
+        viewModel.currentUser.observe(viewLifecycleOwner, Observer {
+            binding.currentUser = it
+        })
+
+        viewModel.userInputErrorMessage.observe(viewLifecycleOwner, Observer {
+            requireContext().toast(it)
+        })
+
+        viewModel.showProfileChangesSavedMessage.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                requireContext().toast(R.string.profile_changes_saved_message)
+                viewModel.profileChangesSavedMessageShown()
+            }
+        })
 
         root.profileIconImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -63,7 +84,7 @@ class ProfileFragment : Fragment() {
                     .setPositiveButton(getString(R.string.dialog_positive_answer)) { dialog, _ ->
                         val name = root.nameEditText.data
                         val bio = root.bioEditText.data
-                        presenter.saveProfileChanges(name, bio,
+                        viewModel.saveProfileChanges(name, bio,
                             pickedProfileImageUri)
                         dialog.dismiss()
                     }
@@ -75,7 +96,7 @@ class ProfileFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setMessage(R.string.sign_out_dialog_message)
                     .setPositiveButton(getString(R.string.dialog_positive_answer)) { dialog, _ ->
-                        presenter.signOutFromFirebase()
+                        viewModel.signOutFromFirebase()
                         startActivity<SignInActivity>()
                         activity?.finish()
                         dialog.dismiss()
@@ -95,11 +116,6 @@ class ProfileFragment : Fragment() {
             pickedProfileImageUri = data?.data!!
             root.profileIconImageView.run { setImageURI(data.data) }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
     }
 
 }

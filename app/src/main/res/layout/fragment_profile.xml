@@ -1,60 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
-    tools:context=".main.ProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <LinearLayout
+        <variable
+            name="currentUser"
+            type="com.datafrey.freymessenger.model.User" />
+
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".main.ProfileFragment">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="5">
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileIconImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:src="@drawable/logo"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileIconImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo"
+                    url="@{currentUser.profilePictureUrl}"/>
+
+                <EditText
+                    android:id="@+id/nameEditText"
+                    android:layout_width="258dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
+                    android:hint="@string/profile_name_edit_text_hint"
+                    android:maxLength="30"
+                    android:text="@{currentUser.name}"/>
+
+            </LinearLayout>
 
             <EditText
-                android:id="@+id/nameEditText"
-                android:layout_width="258dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:hint="@string/profile_name_edit_text_hint"
-                android:maxLength="30"/>
+                android:id="@+id/bioEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="@string/profile_bio_edit_text_hint"
+                android:maxLines="8"
+                android:maxLength="200"
+                android:scrollbars="vertical"
+                android:text="@{currentUser.bio}"/>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/bioEditText"
+        <TextView
+            android:id="@+id/idTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="@string/profile_bio_edit_text_hint"
-            android:maxLines="8"
-            android:maxLength="200"
-            android:scrollbars="vertical"/>
+            android:textAlignment="center"
+            android:alpha="0.5"
+            android:layout_marginTop="400dp"
+            android:text="@{`id: ` + currentUser.id}"/>
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/idTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:alpha="0.5"
-        android:layout_marginTop="400dp"/>
-
-</RelativeLayout>
+    </RelativeLayout>
+</layout>
