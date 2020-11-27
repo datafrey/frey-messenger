@@ -1,7 +1,8 @@
-package com.datafrey.freymessenger.main
+package com.datafrey.freymessenger.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.datafrey.freymessenger.adapters.UserAdapter
 import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -58,5 +59,4 @@ class ChatsViewModel : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
 }

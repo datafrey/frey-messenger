@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.chat
+package com.datafrey.freymessenger.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -13,9 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.datafrey.freymessenger.R
-import com.datafrey.freymessenger.chat.ChatViewModel.ChatViewModelFactory
 import com.datafrey.freymessenger.data
-import com.datafrey.freymessenger.loadImage
+import com.datafrey.freymessenger.loadImageFromUrl
+import com.datafrey.freymessenger.viewmodels.ChatViewModel
+import com.datafrey.freymessenger.viewmodels.ChatViewModel.ChatViewModelFactory
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_activity_action_bar.view.*
 
@@ -60,7 +61,7 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
         val view = inflater.inflate(R.layout.chat_activity_action_bar, null)
 
         with (view) {
-            loadImage(recipientUserProfilePictureUrl, userIconImageView)
+            userIconImageView.loadImageFromUrl(recipientUserProfilePictureUrl)
             userNameTextView.text = recipientUserName
         }
 
@@ -134,5 +135,4 @@ class ChatActivity : AppCompatActivity(R.layout.activity_chat) {
             viewModel.sendImage(selectedImageUri)
         }
     }
-
 }

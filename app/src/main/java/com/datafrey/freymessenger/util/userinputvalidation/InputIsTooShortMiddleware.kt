@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.userinputvalidation
+package com.datafrey.freymessenger.util.userinputvalidation
 
 class InputIsTooShortMiddleware(
     private val minimumLength: Int
@@ -11,5 +11,4 @@ class InputIsTooShortMiddleware(
 
         return checkNext(input)
     }
-
 }

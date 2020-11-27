@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.userinputvalidation
+package com.datafrey.freymessenger.util.userinputvalidation
 
 class InputIsEmptyMiddleware : InputValidatorMiddleware() {
 
@@ -9,5 +9,4 @@ class InputIsEmptyMiddleware : InputValidatorMiddleware() {
 
         return checkNext(input)
     }
-
 }

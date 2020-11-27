@@ -1,8 +1,9 @@
-package com.datafrey.freymessenger.chat
+package com.datafrey.freymessenger.viewmodels
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.datafrey.freymessenger.adapters.MessageAdapter
 import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.Message
 import com.datafrey.freymessenger.model.StorageNodeNames
@@ -116,5 +117,4 @@ class ChatViewModel : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
 }

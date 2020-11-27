@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.main
+package com.datafrey.freymessenger.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,5 +23,4 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-
 }

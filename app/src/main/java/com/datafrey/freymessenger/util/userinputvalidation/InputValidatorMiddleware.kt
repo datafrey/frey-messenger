@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.userinputvalidation
+package com.datafrey.freymessenger.util.userinputvalidation
 
 abstract class InputValidatorMiddleware {
 
@@ -18,5 +18,4 @@ abstract class InputValidatorMiddleware {
 
         return next!!.check(input)
     }
-
 }

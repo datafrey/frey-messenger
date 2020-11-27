@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.main
+package com.datafrey.freymessenger.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -34,12 +34,7 @@ class UserAdapter(
         fun bindUser(user: User, userItemEventListener: UserItemEventListener?) {
             binding.user = user
             binding.userItemEventListener = userItemEventListener
+            binding.executePendingBindings()
         }
-
     }
-
-}
-
-interface UserItemEventListener {
-    fun onClick(clickedItemUserInfo: User)
 }

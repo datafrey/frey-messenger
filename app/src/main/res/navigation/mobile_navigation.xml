@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.datafrey.freymessenger.main.ChatsFragment"
+        android:name="com.datafrey.freymessenger.fragments.ChatsFragment"
         android:label="@string/title_chats"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.datafrey.freymessenger.main.ProfileFragment"
+        android:name="com.datafrey.freymessenger.fragments.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

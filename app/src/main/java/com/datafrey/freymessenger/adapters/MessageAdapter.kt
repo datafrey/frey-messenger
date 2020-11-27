@@ -1,9 +1,8 @@
-package com.datafrey.freymessenger.chat
+package com.datafrey.freymessenger.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.datafrey.freymessenger.R
@@ -33,17 +32,5 @@ class MessageAdapter
 
             binding.executePendingBindings()
         }
-
     }
-
-}
-
-class MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
-
-    override fun areItemsTheSame(oldItem: Message, newItem: Message) =
-        oldItem.id == newItem.id
-
-    override fun areContentsTheSame(oldItem: Message, newItem: Message) =
-        oldItem == newItem
-
 }

@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.signin
+package com.datafrey.freymessenger.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.model.DatabaseNodeNames
 import com.datafrey.freymessenger.model.User
-import com.datafrey.freymessenger.userinputvalidation.InputIsEmptyMiddleware
-import com.datafrey.freymessenger.userinputvalidation.InputIsTooLongMiddleware
-import com.datafrey.freymessenger.userinputvalidation.InputIsTooShortMiddleware
-import com.datafrey.freymessenger.userinputvalidation.InputValidationResult
+import com.datafrey.freymessenger.util.userinputvalidation.InputIsEmptyMiddleware
+import com.datafrey.freymessenger.util.userinputvalidation.InputIsTooLongMiddleware
+import com.datafrey.freymessenger.util.userinputvalidation.InputIsTooShortMiddleware
+import com.datafrey.freymessenger.util.userinputvalidation.InputValidationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -157,5 +157,4 @@ class SignInViewModel : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.main
+package com.datafrey.freymessenger.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
+import com.datafrey.freymessenger.activities.SignInActivity
 import com.datafrey.freymessenger.data
 import com.datafrey.freymessenger.databinding.FragmentProfileBinding
-import com.datafrey.freymessenger.main.ProfileViewModel.ProfileViewModelFactory
-import com.datafrey.freymessenger.signin.SignInActivity
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast
+import com.datafrey.freymessenger.viewmodels.ProfileViewModel
+import com.datafrey.freymessenger.viewmodels.ProfileViewModel.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 
@@ -118,5 +119,4 @@ class ProfileFragment : Fragment() {
             root.profileIconImageView.run { setImageURI(data.data) }
         }
     }
-
 }

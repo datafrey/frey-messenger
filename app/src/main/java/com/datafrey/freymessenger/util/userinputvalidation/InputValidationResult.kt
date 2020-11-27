@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.userinputvalidation
+package com.datafrey.freymessenger.util.userinputvalidation
 
 enum class InputValidationResult {
     OK,

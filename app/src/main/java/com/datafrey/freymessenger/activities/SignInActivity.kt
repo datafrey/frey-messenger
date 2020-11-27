@@ -1,4 +1,4 @@
-package com.datafrey.freymessenger.signin
+package com.datafrey.freymessenger.activities
 
 import android.os.Bundle
 import android.view.View
@@ -8,10 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.datafrey.freymessenger.R
 import com.datafrey.freymessenger.data
-import com.datafrey.freymessenger.main.MainActivity
-import com.datafrey.freymessenger.signin.SignInViewModel.SignInViewModelFactory
 import com.datafrey.freymessenger.startActivity
 import com.datafrey.freymessenger.toast
+import com.datafrey.freymessenger.viewmodels.SignInViewModel
+import com.datafrey.freymessenger.viewmodels.SignInViewModel.SignInViewModelFactory
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
@@ -65,5 +65,4 @@ class SignInActivity : AppCompatActivity(R.layout.activity_sign_in) {
         }
         signInModeActive = !signInModeActive
     }
-
 }

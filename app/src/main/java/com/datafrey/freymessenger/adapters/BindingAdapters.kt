@@ -1,11 +1,10 @@
-package com.datafrey.freymessenger
+package com.datafrey.freymessenger.adapters
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.datafrey.freymessenger.loadImageFromUrl
 
 @BindingAdapter("url")
 fun loadImage(view: ImageView, url: String?) {
-    if (url != null) {
-        view.context.loadImage(url, view)
-    }
+    url?.let { view.loadImageFromUrl(it) }
 }

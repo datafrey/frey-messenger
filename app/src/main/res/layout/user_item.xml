@@ -9,7 +9,7 @@
 
         <variable
             name="userItemEventListener"
-            type="com.datafrey.freymessenger.main.UserItemEventListener" />
+            type="com.datafrey.freymessenger.adapters.UserItemEventListener" />
 
     </data>
 
